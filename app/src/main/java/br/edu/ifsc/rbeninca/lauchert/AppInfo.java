@@ -28,10 +28,14 @@ public class AppInfo {
     }
 
     public AppInfo(ApplicationInfo applicationInfo , PackageManager pm) {
-
-
-        this.versionName= "";
-        this.versionCode= 0;
+        PackageInfo packageInfo=new PackageInfo();
+        try{
+            packageInfo= pm.getPackageInfo(applicationInfo.packageName,0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        this.versionName=packageInfo.versionName;
+        this.versionCode=packageInfo.versionCode;
 
         this.appname=applicationInfo.loadLabel(pm).toString();
         this.pname=applicationInfo.packageName;
