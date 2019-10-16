@@ -2,31 +2,27 @@ package br.edu.ifsc.rbeninca.lauchert;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ComponentName;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
-import android.util.Log;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.net.InterfaceAddress;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
-
     ListView listView;
-
+    LaucherControler laucherControler;
+    EditText EditTextPesquisa;
+    ArrayList<AppInfo> aplicativosList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +30,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.listView);
-        ArrayList<AppInfo> aplicativosList=loadAppInf();
-        final AppInfoArrayAdapter arrayAdapter  = new AppInfoArrayAdapter(getApplicationContext(),
-                                                                    R.layout.item_list_app,
-                                                                    aplicativosList);
-        listView.setAdapter(arrayAdapter);
+        EditTextPesquisa = findViewById(R.id.editTextKeyWord);
+
+        laucherControler=new  LaucherControler(getApplicationContext());
+        this.loadListView("");
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -49,20 +46,39 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
+        EditTextPesquisa.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-
-    public  ArrayList<AppInfo> loadAppInf(){
-        ArrayList<AppInfo>  arrayList = new ArrayList<AppInfo>();
-        List<PackageInfo> packs = getPackageManager().getInstalledPackages(0);
-        for ( PackageInfo pi: packs) {
-            if(pi.applicationInfo.FLAG_SYSTEM==1){
-                arrayList.add(new AppInfo(pi,getPackageManager()));
             }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                loadListView(EditTextPesquisa.getText().toString());
+            }
+        });
+
+
+
         }
-        return  arrayList;
+
+    public void loadListView(String key ){
+        aplicativosList=laucherControler.loadAppInf(key);
+        AppInfoArrayAdapter arrayAdapter  = new AppInfoArrayAdapter(getApplicationContext(),
+                R.layout.item_list_app,
+                aplicativosList );
+
+                listView.setAdapter(arrayAdapter);
     }
+
+
+
 
 
 
