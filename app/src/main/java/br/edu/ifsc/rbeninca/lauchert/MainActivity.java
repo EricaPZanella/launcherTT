@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         EditTextPesquisa.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                loadListView(EditTextPesquisa.getText().toString());
             }
 
             @Override
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                loadListView(EditTextPesquisa.getText().toString());
+
             }
         });
 

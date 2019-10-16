@@ -38,6 +38,7 @@ public class AppInfoArrayAdapter extends ArrayAdapter {
         TextView textViewPackageName= (TextView) convertView.findViewById(R.id.textViewPackageName);
         TextView textViewVersionCode= (TextView) convertView.findViewById(R.id.textViewVersionCode);
         TextView textViewVersionName= (TextView) convertView.findViewById(R.id.textViewVersionName);
+        TextView textViewDataDir= (TextView) convertView.findViewById(R.id.textViewDataDir);
         ImageView imageView=(ImageView) convertView.findViewById(R.id.imageView);
 
         AppInfo appInfo = (AppInfo) getItem(position);
@@ -46,6 +47,7 @@ public class AppInfoArrayAdapter extends ArrayAdapter {
         textViewPackageName.setText(appInfo.pname);
         textViewVersionCode.setText(Integer.toString(appInfo.versionCode));
         textViewVersionName.setText(appInfo.versionName);
+        textViewDataDir.setText(appInfo.datadir);
         imageView.setImageDrawable(appInfo.icon);
 
         return convertView;

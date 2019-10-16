@@ -27,4 +27,17 @@ public class AppInfo {
 
     }
 
+    public AppInfo(ApplicationInfo applicationInfo , PackageManager pm) {
+
+
+        this.versionName= "";
+        this.versionCode= 0;
+
+        this.appname=applicationInfo.loadLabel(pm).toString();
+        this.pname=applicationInfo.packageName;
+        this.datadir=applicationInfo.dataDir;
+        this.icon=applicationInfo.loadIcon(pm);
+
+    }
+
 }
