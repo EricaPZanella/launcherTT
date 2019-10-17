@@ -28,16 +28,19 @@ public class LaucherControler {
     public ArrayList<AppInfo> loadAppInf(final String key){
         appInfoArrayList = new ArrayList<AppInfo>();
 
+        // LoadApps using Intent Query and filter intent category Launcher.
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
         List<ResolveInfo> pkgAppsList = mContext.getPackageManager().queryIntentActivities( mainIntent, 0);
         Iterator<ResolveInfo> resolveInfoIterator = pkgAppsList.iterator();
+
+        //Create arrayListAppInfo, (Easily optimized, but not done)
         while(resolveInfoIterator.hasNext()){
             ResolveInfo resolveInfo = resolveInfoIterator.next();
             appInfoArrayList.add(new AppInfo(resolveInfo.activityInfo.applicationInfo,mContext.getPackageManager()));
         }
 
+        //Order by itens
         ComparatorAppInfo comparator = new ComparatorAppInfo();
         Collection<AppInfo>  appInfos = appInfoArrayList.stream().filter((d) -> d.appname.toLowerCase().contains (key.toLowerCase().trim())).collect(Collectors.toList());
         appInfoArrayList = new ArrayList<>(appInfos);
