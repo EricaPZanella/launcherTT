@@ -42,6 +42,7 @@ public class LaucherControler {
 
         //Order by itens
         ComparatorAppInfo comparator = new ComparatorAppInfo();
+        //Lamda Expression (>1.8)  see build.gralde  has pragma compile
         Collection<AppInfo>  appInfos = appInfoArrayList.stream().filter((d) -> d.appname.toLowerCase().contains (key.toLowerCase().trim())).collect(Collectors.toList());
         appInfoArrayList = new ArrayList<>(appInfos);
         Collections.sort(appInfoArrayList, comparator);
