@@ -1,6 +1,8 @@
 package br.edu.ifsc.rbeninca.lauchert;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.content.Intent;
@@ -13,62 +15,91 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
-    ListView listView;
+    RecyclerView recyclerView;
     LaucherControler laucherControler;
     EditText editTextPesquisa;
     ArrayList<AppInfo> aplicativosList;
+    AppInfoArrayAdapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = findViewById(R.id.listView);
+        recyclerView = findViewById(R.id.recycleView);
         editTextPesquisa = findViewById(R.id.editTextKeyWord);
 
-        //Inicialização do controlador do Laycher
+
+
+        //Inicialização do controlador do Laucher
         laucherControler=new  LaucherControler(getApplicationContext());
-        this.loadListView(""); //Carga inicial do laucher
+        this.refreshList("");
+
+        //configurando recycler view.
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new GridLayoutManager(this,3); //new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
 
-        //definição dos listeners para click e pesquisa
-        listView.setOnItemClickListener( this.onItemClickListener);
-        editTextPesquisa.addTextChangedListener(this.textWatcherPesquisa);
+        //configurando click do recyclerview.
+        recyclerView.addOnItemTouchListener( new RecyclerItemClickListener(
+                getApplicationContext(),
+                recyclerView,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        AppInfo appInfo=(AppInfo)  mAdapter.mDataset.get(position);
+                        Intent intent = getPackageManager().getLaunchIntentForPackage ( appInfo.pname  );
+                        Toast.makeText(getApplicationContext(),appInfo.appname,Toast.LENGTH_LONG).show();
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }
+        ));
+        //configurando o textwacher
+            editTextPesquisa.addTextChangedListener(this.textWatcherPesquisa);
         }
 
-
-
-    public void loadListView(String key ){
+    public void refreshList(String key ){
         aplicativosList=laucherControler.loadAppInf(key);
-        AppInfoArrayAdapter arrayAdapter  = new AppInfoArrayAdapter(getApplicationContext(),
+        mAdapter  = new AppInfoArrayAdapter(getApplicationContext(),
                 R.layout.item_list_app,
                 aplicativosList );
-                listView.setAdapter(arrayAdapter);
+                recyclerView.setAdapter(mAdapter);
     }
-    //Implementação clase anonima para click em listview.
-    private AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            Intent intent = getPackageManager().getLaunchIntentForPackage ( ((AppInfo) adapterView.getItemAtPosition(i)).pname);
-            //intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-    };
+
+
+
+
+
 
 
     //Implementação do analisador texto para o campo de pesquisa
     private TextWatcher textWatcherPesquisa =new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            loadListView(editTextPesquisa.getText().toString());
+
+
         }
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            refreshList(editTextPesquisa.getText().toString());
 
         }
 
