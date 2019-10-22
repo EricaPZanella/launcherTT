@@ -3,7 +3,6 @@ package br.edu.ifsc.rbeninca.lauchert;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.ResolveInfo;
 
 import java.util.ArrayList;
@@ -13,10 +12,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static br.edu.ifsc.rbeninca.lauchert.AppInfo.pname;
+
 public class LaucherControler {
     Context mContext ;
     ArrayList<AppInfo>  appInfoArrayList ;
     List<ApplicationInfo> applicationInfoList;
+    ArrayList<AppInfo> appInfoArrayListFinal;
 
     LaucherControler ( Context  context){
         mContext = context;
@@ -27,6 +29,8 @@ public class LaucherControler {
 
     public ArrayList<AppInfo> loadAppInf(final String key){
         appInfoArrayList = new ArrayList<AppInfo>();
+        appInfoArrayListFinal = new ArrayList<AppInfo>();
+
 
         // LoadApps using Intent Query and filter intent category Launcher.
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
@@ -45,9 +49,25 @@ public class LaucherControler {
         //Lamda Expression (>1.8)  see build.gralde  has pragma compile
         Collection<AppInfo>  appInfos = appInfoArrayList.stream().filter((d) -> d.appname.toLowerCase().contains (key.toLowerCase().trim())).collect(Collectors.toList());
         appInfoArrayList = new ArrayList<>(appInfos);
+
         Collections.sort(appInfoArrayList, comparator);
 
-        return  appInfoArrayList;
+        String[] pakApps  =  {"com.google.android.dialer", "com.google.android.apps.messaging"};
+
+//        String[] pakApps  = {"com.google.android.dialer", "com.google.android.apps.messaging", "com.android.contacts", "com.google.android.deskclock", "com.android.calculator2",
+//                "com.google.android.music", "com.google.android.apps.maps", "com.google.android.youtube", "com.google.android.apps.photos", "com.google.android.apps.photos", "com.google.android.videos",
+//                "com.android.settings", "com.android.chrome"};
+
+        for (int x = 0; x<=pakApps.length; x++) {
+
+            if(appInfoArrayList.forEach(appInfos.equals(pakApps[x])) -> {});){
+
+            }
+            (appInfos pname.equal(pakApps[x]))
+             appInfoArrayListFinal.add(x);
+
+        }
+        return  appInfoArrayListFinal;
     }
 
 }

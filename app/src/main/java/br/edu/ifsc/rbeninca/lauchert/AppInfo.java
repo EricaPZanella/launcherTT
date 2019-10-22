@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
 public class AppInfo {
 
     public String appname = "";
-    public String pname = "";
+    public static String pname = "";
     public String versionName = "";
     public String datadir;
     public int versionCode = 0;
