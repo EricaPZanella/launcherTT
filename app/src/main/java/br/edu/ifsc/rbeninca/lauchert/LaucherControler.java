@@ -52,20 +52,19 @@ public class LaucherControler {
 
         Collections.sort(appInfoArrayList, comparator);
 
-        String[] pakApps  =  {"com.google.android.dialer", "com.google.android.apps.messaging"};
+        String [] pakApps  =  {"com.google.android.youtube"}; //, "com.google.android.dialer", "com.google.android.apps.messaging"};
 
-//        String[] pakApps  = {"com.google.android.dialer", "com.google.android.apps.messaging", "com.android.contacts", "com.google.android.deskclock", "com.android.calculator2",
+//        String [] pakApps  = {"com.google.android.dialer", "com.google.android.apps.messaging", "com.android.contacts", "com.google.android.deskclock", "com.android.calculator2",
 //                "com.google.android.music", "com.google.android.apps.maps", "com.google.android.youtube", "com.google.android.apps.photos", "com.google.android.apps.photos", "com.google.android.videos",
 //                "com.android.settings", "com.android.chrome"};
 
-        for (int x = 0; x<=pakApps.length; x++) {
 
-            if(appInfoArrayList.forEach(appInfos.equals(pakApps[x])) -> {});){
-
+        for(AppInfo appInfo : appInfoArrayList) {
+            for (int x = 0; x < pakApps.length; x++) {
+                if(appInfo.pname.equals(pakApps[x])){
+                    appInfoArrayListFinal.add(appInfo);
+                }
             }
-            (appInfos pname.equal(pakApps[x]))
-             appInfoArrayListFinal.add(x);
-
         }
         return  appInfoArrayListFinal;
     }
